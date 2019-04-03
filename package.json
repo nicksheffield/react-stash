@@ -1,0 +1,32 @@
+{
+	"name": "@nicksheffield/react-stash",
+	"version": "0.1.0",
+	"description": "Data fetching in react via hooks and suspense",
+	"main": "src/index.js",
+	"scripts": {
+		"test": "jest"
+	},
+	"keywords": [],
+	"license": "ISC",
+	"homepage": "https://github.com/nicksheffield/react-stash",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nicksheffield/react-stash.git"
+	},
+	"bugs": {
+		"url": "https://github.com/nicksheffield/react-stash/issues",
+		"email": "numbereft@gmail.com"
+	},
+	"author": {
+		"name": "Nick Sheffield",
+		"email": "numbereft@gmail.com",
+		"url": "http://nicksheffield.me/"
+	},
+	"peerDependencies": {
+		"react": "^16.8.0"
+	},
+	"dependencies": {
+		"axios": "^0.18.0",
+		"deep-equal": "^1.0.1"
+	}
+}
