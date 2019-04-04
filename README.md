@@ -22,7 +22,7 @@ store/
 The `index.js` will look something like this:
 
 ```javascript
-import createStash from 'react-stash'
+import createStash from '@nicksheffield/react-stash'
 
 const req = require.context('./models', true, /.js$/)
 const models = req.keys().map(function(key) {
