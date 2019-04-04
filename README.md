@@ -6,6 +6,14 @@ Data fetching in react via hooks and suspense
 
 I will probably improve these docs in future, but for now, just follow these instructions:
 
+## Install
+
+Before I publish this to npm, you can install via the github url
+
+```
+$ npm install --save https://github.com/nicksheffield/react-stash
+```
+
 ## Setup
 
 You'll want to add a directory structure like this inside your project:
@@ -29,7 +37,7 @@ const models = req.keys().map(function(key) {
 	return req(key).default
 })
 
-export const { save, destroy, useFind, useQuery } = createStash({ models })
+export const { useFind, useQuery, save, destroy } = createStash({ models })
 ```
 
 This will auto-require models from the `models` folder, and then pass them into the `createStash` function.
@@ -80,10 +88,12 @@ This function will send a post or put request to your api, depending on the exis
 
 The result will be integrated into the cache.
 
+This function returns a promise.
+
 ---
 
 ### `destroy(modelName, record)`
 
-This function will send a delete request to your api, depending on the existence of an `id` field.
+This function will send a delete request to your api, and upon a success response, remove the record from the cache.
 
-The result will be integrated into the cache.
+This function returns a promise.
