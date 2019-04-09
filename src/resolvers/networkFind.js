@@ -29,7 +29,9 @@ const c = (context) => {
 						for (let i = 0; i < rels.length; i++) {
 							const rel = rels[i]
 
-							const [linkName, ...withs] = rel.split('.')
+							const [linkName1, ...withs] = rel.split('.')
+							// const optional = linkName1.indexOf('?') > -1
+							const linkName = linkName1.replace(/\?/g, '')
 							const link = model.relationships[linkName]
 							const modelName = link.modelName
 							const fk = link.foreignKey
