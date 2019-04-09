@@ -13,6 +13,7 @@ const c = (context) => {
 	}
 
 	const run = (type, params, opts = {}) => {
+		let firstRun = true
 		// check for past fetch errors, and throw them
 		for (const fetchCache of fetchCaches) {
 			if (
@@ -20,6 +21,7 @@ const c = (context) => {
 				deepEqual(params, fetchCache.params) &&
 				deepEqual(opts, fetchCache.opts)
 			) {
+				firstRun = false
 				if (Object.prototype.hasOwnProperty.call(fetchCache, 'error')) {
 					throw fetchCache.error
 				}
@@ -55,7 +57,7 @@ const c = (context) => {
 
 		let fetched = false
 
-		if (!record) {
+		if (!record || firstRun) {
 			fetched = true
 			fetch()
 		}
