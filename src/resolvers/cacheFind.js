@@ -6,47 +6,51 @@ const c = (context) => {
 		const state = context.store.getState()
 		let records = state[type].filter((x) => matchesParams(x, params))
 
-		if (records) {
-			if (opts.with) {
-				records = records.map((record) => {
-					const rels = opts.with instanceof Array ? opts.with : [opts.with]
+		try {
+			if (records) {
+				if (opts.with) {
+					records = records.map((record) => {
+						const rels = opts.with instanceof Array ? opts.with : [opts.with]
 
-					const relations = rels.reduce((list, rel) => {
-						const [linkName, ...withs] = rel.split('.')
-						const link = model.relationships[linkName]
-						const modelName = link.modelName
-						const fk = link.foreignKey
+						const relations = rels.reduce((list, rel) => {
+							const [linkName1, ...withs] = rel.split('.')
+							const optional = linkName1.indexOf('?') > -1
+							const linkName = linkName1.replace(/\?/g, '')
+							const link = model.relationships[linkName]
+							const modelName = link.modelName
+							const fk = link.foreignKey
 
-						switch (link.type) {
-							case 'belongsTo':
-								return {
-									...list,
-									[linkName]: cacheFind(modelName, { id: record[fk] }, { with: withs, single: true }),
-								}
-							case 'hasOne':
-								return {
-									...list,
-									[linkName]: cacheFind(
-										modelName,
-										{ [fk]: record.id },
-										{ with: withs, single: true }
-									),
-								}
-							case 'hasMany':
-								return {
-									...list,
-									[linkName]: cacheFind(modelName, { [fk]: record.id }, { with: withs }),
-								}
-							default:
-								return null
+							let found =
+								link.type === 'belongsTo'
+									? cacheFind(modelName, { id: record[fk] }, { with: withs, single: true })
+									: link.type === 'hasOne'
+									? cacheFind(modelName, { [fk]: record.id }, { with: withs, single: true })
+									: link.type === 'hasMany'
+									? cacheFind(modelName, { [fk]: record.id }, { with: withs })
+									: null
+
+							if (!found && !optional) {
+								throw new Error('cache hole found')
+							}
+
+							return {
+								...list,
+								[linkName]: found,
+							}
+						}, {})
+
+						return {
+							...record,
+							...relations,
 						}
-					}, {})
-
-					return {
-						...record,
-						...relations,
-					}
-				})
+					})
+				}
+			}
+		} catch (e) {
+			if (e.message === 'cache hole found') {
+				return null
+			} else {
+				throw e
 			}
 		}
 
