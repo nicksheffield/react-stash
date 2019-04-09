@@ -45,7 +45,7 @@ This will auto-require models from the `models` folder, and then pass them into 
 The model files should look something like this:
 
 ```javascript
-import { belongsTo, hasMany } from 'react-stash'
+import { belongsTo, hasMany } from '@nicksheffield/react-stash'
 
 export default {
 	name: 'user',
